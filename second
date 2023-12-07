@@ -1,0 +1,217 @@
+// Using inheritance
+#include <iostream>
+
+class PowerOperation {
+public:
+    virtual double performPowerOperation(double base, int exponent) = 0;
+};
+
+class RecursivePowerOperation : public PowerOperation {
+public:
+    double performPowerOperation(double base, int exponent) override {
+        if (exponent == 0) {
+            return 1.0;
+        } else if (exponent == 1) {
+            return base;
+        } else {
+            return base * performPowerOperation(base, exponent - 1);
+        }
+    }
+};
+
+class IterativePowerOperation : public PowerOperation {
+public:
+    double performPowerOperation(double base, int exponent) override {
+        double result = 1.0;
+        for (int i = 0; i < exponent; i++) {
+            result *= base;
+        }
+        return result;
+    }
+};
+
+int main() {
+    double baseValue;
+    int exponentValue;
+
+    std::cout << "Enter the base value: ";
+    std::cin >> baseValue;
+
+    std::cout << "Enter the exponent value: ";
+    std::cin >> exponentValue;
+
+    RecursivePowerOperation recursiveOperation;
+    double recursiveResult = recursiveOperation.performPowerOperation(baseValue, exponentValue);
+
+    IterativePowerOperation iterativeOperation;
+    double iterativeResult = iterativeOperation.performPowerOperation(baseValue, exponentValue);
+
+    std::cout << "Recursive power: " << recursiveResult << std::endl;
+    std::cout << "Iterative power: " << iterativeResult << std::endl;
+
+    return 0;
+}
+
+// Using exception handling
+#include <iostream>
+
+class PowerException : public std::exception {
+public:
+    PowerException(const std::string& errorMessage) : errorMessage(errorMessage) {}
+
+    const std::string& getMessage() const {
+        return errorMessage;
+    }
+
+private:
+    std::string errorMessage;
+};
+
+double calculatePower(double base, int exponent) {
+    if (base == 0 && exponent == 0) {
+        throw PowerException("Invalid input: base cannot be 0 when exponent is 0");
+    }
+
+    if (base < 0) {
+        throw PowerException("Invalid input: base cannot be negative");
+    }
+
+    if (exponent < 0) {
+        throw PowerException("Invalid input: exponent cannot be negative");
+    }
+
+    if (exponent == 0) {
+        return 1.0;
+    } else if (exponent == 1) {
+        return base;
+    } else {
+        return base * calculatePower(base, exponent - 1);
+    }
+}
+
+int main() {
+    double baseValue;
+    int exponentValue;
+
+    std::cout << "Enter the base value: ";
+    std::cin >> baseValue;
+
+    std::cout << "Enter the exponent value: ";
+    std::cin >> exponentValue;
+
+    try {
+        double result = calculatePower(baseValue, exponentValue);
+        std::cout << "The power of " << baseValue << " raised to " << exponentValue << " is: " << result << std::endl;
+    } catch (PowerException& e) {
+        std::cerr << "Error: " << e.getMessage() << std::endl;
+    }
+
+    return 0;
+}
+
+// Using virtual function
+#include <iostream>
+
+class PowerOperation {
+public:
+    virtual double performPowerOperation(double base, int exponent) = 0;
+};
+
+class RecursivePowerOperation : public PowerOperation {
+public:
+    double performPowerOperation(double base, int exponent) override {
+        if (exponent == 0) {
+            return 1.0;
+        } else if (exponent == 1) {
+            return base;
+        } else {
+            return base * performPowerOperation(base, exponent - 1);
+        }
+    }
+};
+
+class IterativePowerOperation : public PowerOperation {
+public:
+    double performPowerOperation(double base, int exponent) override {
+        double result = 1.0;
+        for (int i = 0; i < exponent; i++) {
+            result *= base;
+        }
+        return result;
+    }
+};
+
+int main() {
+    double baseValue;
+    int exponentValue;
+
+    std::cout << "Enter the base value: ";
+    std::cin >> baseValue;
+
+    std::cout << "Enter the exponent value: ";
+    std::cin >> exponentValue;
+
+    RecursivePowerOperation recursiveOperation;
+    double recursiveResult = recursiveOperation.performPowerOperation(baseValue, exponentValue);
+
+    IterativePowerOperation iterativeOperation;
+    double iterativeResult = iterativeOperation.performPowerOperation(baseValue, exponentValue);
+
+    std::cout << "Recursive power: " << recursiveResult << std::endl;
+    std::cout << "Iterative power: " << iterativeResult << std::endl;
+
+    return 0;
+}
+
+// Using friend function
+#include <iostream>
+
+class PowerOperation {
+private:
+    double base;
+
+public:
+    PowerOperation(double base) : base(base) {}
+
+    friend double calculatePower(PowerOperation& operation, int exponent);
+};
+
+double calculatePower(PowerOperation& operation, int exponent) {
+    if (operation.base == 0 && exponent == 0) {
+        throw std::exception(); // Handle invalid input: base cannot be 0 when exponent is 0
+    }
+
+    if (exponent < 0) {
+        throw std::exception(); // Handle invalid input: exponent cannot be negative
+    }
+
+    if (exponent == 0) {
+        return 1.0;
+    } else if (exponent == 1) {
+        return operation.base;
+    } else {
+        return operation.base * calculatePower(operation, exponent - 1);
+    }
+}
+
+int main() {
+    double baseValue;
+    int exponentValue;
+
+    std::cout << "Enter the base value: ";
+    std::cin >> baseValue;
+
+    std::cout << "Enter the exponent value: ";
+    std::cin >> exponentValue;
+
+    PowerOperation operation(baseValue);
+
+    try {
+        double result = calculatePower(operation, exponentValue);
+        std::cout << "The power of " << baseValue << " raised to " << exponentValue << " is: " << result << std::endl;
+    } catch (std::exception& e) {
+        std::cerr << "Error: Invalid input" << std::endl;
+    }
+
+    return 0;
+}
